@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Hub — Data & Statistik</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="nav-overlay" id="nav-overlay"></div>
+
+  <header class="site-header">
+    <button class="mobile-menu-toggle" id="menu-toggle">☰ Menu</button>
+    <nav class="site-nav" id="site-nav">
+      <button class="mobile-close-btn" id="menu-close">×</button>
+      <a href="index.html" class="active">Home</a>
+      <a href="ral.html">Uji RAL (Penjualan)</a>
+      <a href="dashboard.html">Dashboard KPI</a>
+      <a href="readme.html">Panduan</a>
+    </nav>
+    <button id="theme-toggle" class="theme-toggle">🌙 Dark Mode</button>
+  </header>
+  
+  <main>
+    <div class="hero-section">
+      <h1>Project Hub</h1>
+      <p class="lead">Eksplorasi analisis data melalui pendekatan eksperimen statistik dan visualisasi bisnis.</p>
+    </div>
+
+    <!-- SECTION 1: DESIGN EXPERIMENT -->
+    <section class="hub-section">
+      <div class="section-header">
+        <h2>🧪 Design Experiment</h2>
+        <p>Analisis statistik untuk menguji pengaruh perlakuan (treatment) terhadap hasil.</p>
+      </div>
+      <div class="hub-grid">
+        <a href="ral.html" class="hub-card">
+          <h3>Uji RAL</h3>
+          <p>Rancangan Acak Lengkap. Menguji perbedaan rata-rata antar kategori tanpa faktor pengganggu.</p>
+          <span class="card-link">Buka Halaman &rarr;</span>
+        </a>
+        <a href="#" class="hub-card disabled">
+          <h3>Uji RBAL</h3>
+          <p>Rancangan Bujur Sangkar Latin. Menguji perlakuan dengan dua faktor pengganggu (baris & kolom).</p>
+          <span class="card-link">Segera Hadir</span>
+        </a>
+        <a href="#" class="hub-card disabled">
+          <h3>Uji RBATL / RAK</h3>
+          <p>Rancangan Bujur Sangkar Tak Lengkap / Rancangan Acak Kelompok. Untuk unit eksperimen yang heterogen.</p>
+          <span class="card-link">Segera Hadir</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- SECTION 2: DATA VISUALIZATION -->
+    <section class="hub-section">
+      <div class="section-header">
+        <h2>📊 Data Visualization</h2>
+        <p>Representasi visual dari data historis untuk pengambilan keputusan bisnis.</p>
+      </div>
+      <div class="hub-grid">
+        <a href="dashboard.html" class="hub-card">
+          <h3>Dashboard KPI</h3>
+          <p>Monitoring metrik performa retail seperti pendapatan, laba, transaksi, dan analisis channel.</p>
+          <span class="card-link">Buka Halaman &rarr;</span>
+        </a>
+        <a href="#" class="hub-card disabled">
+          <h3>Forecasting</h3>
+          <p>Prediksi tren penjualan bulanan ke depan menggunakan metode Time Series / Regresi.</p>
+          <span class="card-link">Segera Hadir</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/ui.js"></script>
+</body>
+</html>

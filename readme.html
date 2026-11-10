@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panduan Penggunaan</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Overlay untuk Mobile Menu -->
+  <div class="nav-overlay" id="nav-overlay"></div>
+
+  <header class="site-header">
+    <button class="mobile-menu-toggle" id="menu-toggle">☰ Menu</button>
+    <nav class="site-nav" id="site-nav">
+      <button class="mobile-close-btn" id="menu-close">×</button>
+      <a href="index.html">Home</a>
+      <a href="ral.html">Uji RAL (Penjualan)</a>
+      <a href="dashboard.html">Dashboard KPI</a>
+      <a href="readme.html"class="active">Panduan</a>
+    </nav>
+    <button id="theme-toggle" class="theme-toggle">🌙 Dark Mode</button>
+  </header>
+
+  <main>
+    <h1>Panduan Penggunaan</h1>
+    <p class="lead">Pahami cara kerja alat statistik kami dan bagaimana menginterpretasikan hasilnya untuk keputusan bisnis.</p>
+
+    <!-- BOX DISCLAIMER MERAH (SELALU DI ATAS) -->
+    <div class="alert-box">
+      <strong>⚠️ Perhatian:</strong> Seluruh data dan grafik pada halaman <strong>Dashboard KPI</strong> adalah <strong>data dummy (simulasi)</strong>. Tujuan halaman tersebut murni untuk demonstrasi antarmuka (UI) dan visualisasi data, bukan data riil perusahaan.
+    </div>
+
+    <!-- DROPDOWN 1: UJI RAL -->
+    <details class="guide-section" open>
+      <summary class="guide-header">Panduan Uji RAL (Rancangan Acak Lengkap)</summary>
+      <div class="guide-content">
+        
+        <div class="info-box" style="margin-top: 0;">
+          <p><strong>Apa itu Uji RAL?</strong></p>
+          <p>Dalam dunia bisnis, Anda mungkin ingin tahu: <em>"Apakah Strategi Penjualan A, B, dan C menghasilkan rata-rata omzet yang berbeda?"</em>. Uji RAL (ANOVA Satu Arah) membuktikan apakah perbedaan rata-rata tersebut nyata, atau hanya kebetulan.</p>
+        </div>
+
+        <h3>Glosarium (Istilah di Tabel ANOVA)</h3>
+        <dl style="display: grid; grid-template-columns: 200px 1fr; gap: 1rem; margin-top: 1rem;">
+          <dt style="font-weight: 600; color: var(--accent);">P-Value</dt>
+          <dd style="margin: 0;">Angka paling penting. Jika P-Value <strong>di bawah taraf signifikansi (α)</strong>, berarti perbedaan penjualan tersebut <strong>Signifikan</strong> (nyata). Jika di atas α, tidak ada perbedaan nyata.</dd>
+
+          <dt style="font-weight: 600; color: var(--accent);">F-Hitung</dt>
+          <dd style="margin: 0;">Rasio perbandingan variansi antar strategi. Semakin besar nilainya, semakin besar peluang terdapat perbedaan yang nyata.</dd>
+
+          <dt style="font-weight: 600; color: var(--accent);">Derajat Bebas (db)</dt>
+          <dd style="margin: 0;">Angka yang berkaitan dengan jumlah sampel dan kelompok. Dihitung otomatis oleh sistem.</dd>
+        </dl>
+
+        <h3 style="margin-top: 2rem;">Tips Eksperimen RAL</h3>
+        <ul style="line-height: 1.8; padding-left: 1.2rem;">
+          <li><strong>Data harus seimbang:</strong> Pastikan setiap varian (A, B, C) memiliki jumlah data yang persis sama banyaknya (misal: masing-masing 30 hari).</li>
+          <li><strong>Waspadai outlier:</strong> Jika ada satu hari penjualan meledak drastis (misal: viral), pertimbangkan untuk membuang data ekstrem tersebut agar tidak merusak hasil uji.</li>
+        </ul>
+
+      </div>
+    </details>
+
+    <!-- DROPDOWN 2: DASHBOARD KPI -->
+    <details class="guide-section">
+      <summary class="guide-header">Panduan Dashboard KPI</summary>
+      <div class="guide-content">
+        
+        <div class="info-box" style="margin-top: 0;">
+          <p><strong>Apa itu Dashboard KPI?</strong></p>
+          <p>Key Performance Indicator (KPI) adalah metrik terukur yang digunakan untuk mengevaluasi keberhasilan suatu organisasi atau strategi bisnis. Dashboard ini merangkum data tersebut dalam bentuk visual agar mudah dibaca oleh manajemen.</p>
+        </div>
+
+        <h3>Glosarium (Istilah di Dashboard)</h3>
+        <dl style="display: grid; grid-template-columns: 200px 1fr; gap: 1rem; margin-top: 1rem;">
+          <dt style="font-weight: 600; color: var(--accent);">Total Pendapatan</dt>
+          <dd style="margin: 0;">Jumlah keseluruhan uang yang masuk dari penjualan produk/layanan dalam periode tertentu.</dd>
+
+          <dt style="font-weight: 600; color: var(--accent);">AOV (Average Order Value)</dt>
+          <dd style="margin: 0;">Rata-rata uang yang dihabiskan pelanggan dalam satu kali transaksi. Dihitung dari Total Pendapatan dibagi Total Transaksi.</dd>
+
+          <dt style="font-weight: 600; color: var(--accent);">Tingkat Konversi</dt>
+          <dd style="margin: 0;">Persentase pengunjung yang melakukan pembelian dibandingkan dengan total pengunjung yang datang.</dd>
+        </dl>
+
+        <h3 style="margin-top: 2rem;">Cara Membaca Grafik</h3>
+        <ul style="line-height: 1.8; padding-left: 1.2rem;">
+          <li><strong>Tren Pendapatan (Line Chart):</strong> Menunjukkan naik-turunnya omzet dari bulan ke bulan. Perhatikan apakah garis cenderung naik (pertumbuhan) atau turun.</li>
+          <li><strong>Transaksi per Kategori (Bar Chart):</strong> Membandingkan kategori produk mana yang paling banyak terjual. Gunakan ini untuk menentukan di mana harus memfokuskan stok barang.</li>
+        </ul>
+
+      </div>
+    </details>
+
+  </main>
+
+  <script src="js/ui.js"></script>
+</body>
+</html>

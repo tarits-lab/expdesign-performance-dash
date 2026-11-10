@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Uji RAL (ANOVA) — Penjualan</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Load jStat dari CDN untuk menghitung P-Value distribusi F -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.6/jstat.min.js"></script>
+</head>
+<body>
+  <!-- Overlay untuk Mobile Menu -->
+  <div class="nav-overlay" id="nav-overlay"></div>
+
+  <header class="site-header">
+    <button class="mobile-menu-toggle" id="menu-toggle">☰ Menu</button>
+    <nav class="site-nav" id="site-nav">
+      <button class="mobile-close-btn" id="menu-close">×</button>
+      <a href="index.html">Home</a>
+      <a href="ral.html"class="active">Uji RAL (Penjualan)</a>
+      <a href="dashboard.html">Dashboard KPI</a>
+      <a href="readme.html">Panduan</a>
+    </nav>
+    <button id="theme-toggle" class="theme-toggle">🌙 Dark Mode</button>
+  </header>
+  
+  <main>
+    <h1>Uji RAL (Rancangan Acak Lengkap)</h1>
+    
+    <div class="info-box">
+      <p><strong>Apa yang diuji di sini?</strong></p>
+      <p>Alat ini membandingkan apakah ada perbedaan rata-rata penjualan yang nyata dari beberapa <strong>strategi/varian</strong> yang berbeda. Contoh: Varian A (Iklan Instagram), Varian B (Iklan TikTok).</p>
+    </div>
+
+    <form id="anova-form">
+      <!-- Penjelasan Kontekstual & Aturan Input -->
+      <div style="background: var(--result-bg); padding: 1rem; margin-bottom: 2rem; border: 1px solid var(--line); border-left: 4px solid var(--accent);">
+        <p style="margin: 0 0 .5rem; font-weight: 600;">💡 Aturan Input Data:</p>
+        <ul style="margin: 0; padding-left: 1.2rem; font-size: .95rem; color: var(--fg);">
+          <li><strong>Hanya angka:</strong> Jangan masukkan teks atau simbol mata uang (Rp).</li>
+          <li><strong>Desimal pakai titik:</strong> Jika ada nilai desimal, gunakan titik (contoh: <code>105.5</code>).</li>
+          <li><strong>Pemisah spasi:</strong> Pisahkan setiap angka hanya dengan <strong>spasi</strong>.</li>
+          <li><strong>Jumlah data seimbang:</strong> Jumlah angka di Varian A, B, dan C (jika diisi) harus sama banyak.</li>
+        </ul>
+      </div>
+
+      <div class="field">
+        <label>Data Penjualan Varian A
+          <span class="hint">Contoh: 100 120.5 110 105 115</span>
+        </label>
+        <textarea id="dataA" rows="3" placeholder="100 120.5 110 105 115"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Data Penjualan Varian B
+          <span class="hint">Contoh: 130 125 140 135 150</span>
+        </label>
+        <textarea id="dataB" rows="3" placeholder="130 125 140 135 150"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Data Penjualan Varian C (Opsional)
+          <span class="hint">Kosongkan jika hanya membandingkan 2 varian. Contoh: 90 95 85 100 92</span>
+        </label>
+        <textarea id="dataC" rows="3" placeholder="90 95 85 100 92"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Taraf Signifikansi (α)
+          <span class="hint">Batas toleransi kesalahan (Standar: 0.05)</span>
+        </label>
+        <select id="alpha-level">
+          <option value="0.05" selected>0.05 (Standar / 5%)</option>
+          <option value="0.01">0.01 (Ketat / 1%)</option>
+          <option value="0.10">0.10 (Longgar / 10%)</option>
+        </select>
+      </div>
+
+      <div class="btn-row">
+        <button type="button" class="btn" id="calc-anova">Analisis Data</button>
+      </div>
+    </form>
+
+    <!-- Area Error (Bawaan UI) -->
+    <div class="error" id="anova-error"></div>
+    
+    <!-- Area Hasil -->
+    <div id="anova-result" style="display: none;">
+      <h2>Tabel ANOVA</h2>
+      <div class="table-wrapper">
+        <table class="table-anova">
+          <thead>
+            <tr>
+              <th>Sumber Keragaman</th>
+              <th>Derajat Bebas (db)</th>
+              <th>Jumlah Kuadrat (JK)</th>
+              <th>Kuadrat Tengah (KT)</th>
+              <th>F-Hitung</th>
+              <th>P-Value</th>
+            </tr>
+          </thead>
+          <tbody id="anova-tbody">
+            <!-- Baris tabel diisi via JS -->
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="result" id="anova-conclusion" style="margin-top: 1.5rem;"></div>
+    </div>
+
+  </main>
+
+  <script src="js/stats.js"></script>
+  <script src="js/ui.js"></script>
+  
+  <script>
+    document.getElementById("calc-anova").addEventListener("click", () => {
+      // Sembunyikan hasil & error lama
+      UI.setError("anova-error", "");
+      document.getElementById("anova-result").style.display = "none";
+
+      const rawA = document.getElementById("dataA").value;
+      const rawB = document.getElementById("dataB").value;
+      const rawC = document.getElementById("dataC").value;
+
+      // 1. Validasi Karakter Ilegal (Hanya boleh angka 0-9, titik, dan spasi)
+      const hasInvalidChar = (str) => /[^0-9.\s]/.test(str);
+      if (hasInvalidChar(rawA) || hasInvalidChar(rawB) || hasInvalidChar(rawC)) {
+        return UI.showToast("Karakter tidak dikenal. Gunakan hanya angka, spasi, dan titik (.) untuk desimal.");
+      }
+
+      // Helper parsing: Split HANYA berdasarkan spasi, filter NaN
+      const parseData = (str) => {
+        if (!str.trim()) return [];
+        return str.trim().split(/\s+/).map(val => parseFloat(val)).filter(num => !isNaN(num));
+      };
+
+      const groupA = parseData(rawA);
+      const groupB = parseData(rawB);
+      const groupC = parseData(rawC);
+
+      // 2. Validasi Jumlah Data Minimal
+      if (groupA.length < 2 || groupB.length < 2) {
+        return UI.showToast("Data tidak cukup. Minimal masukkan 2 angka untuk Varian A dan Varian B.");
+      }
+
+      // 3. Validasi Keseimbangan Data (RAL)
+      const lenA = groupA.length;
+      const lenB = groupB.length;
+      const lenC = groupC.length;
+
+      if (lenA !== lenB || (lenC > 0 && lenA !== lenC)) {
+        return UI.showToast("Data tidak lengkap/seimbang. Jumlah data pada setiap varian harus sama untuk Rancangan Acak Lengkap (RAL).");
+      }
+
+      // 4. Persiapan Perhitungan
+      const groups = [groupA, groupB];
+      if (groupC.length > 0) groups.push(groupC);
+
+      // Ambil nilai Alpha
+      const alpha = parseFloat(document.getElementById("alpha-level").value);
+
+      // Hitung ANOVA
+      const res = Stats.calculateANOVA(groups);
+
+      // Render Tabel
+      const tbody = document.getElementById("anova-tbody");
+      tbody.innerHTML = `
+        <tr>
+          <td>Perlakuan (Varian)</td>
+          <td>${res.dfBetween}</td>
+          <td>${res.ssBetween.toFixed(2)}</td>
+          <td>${res.msBetween.toFixed(2)}</td>
+          <td><strong>${res.fValue.toFixed(3)}</strong></td>
+          <td><strong>${res.pValue < 0.001 ? '< 0.001' : res.pValue.toFixed(4)}</strong></td>
+        </tr>
+        <tr>
+          <td>Galat (Error)</td>
+          <td>${res.dfWithin}</td>
+          <td>${res.ssWithin.toFixed(2)}</td>
+          <td>${res.msWithin.toFixed(2)}</td>
+          <td>—</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>Total</td>
+          <td>${res.dfTotal}</td>
+          <td>${res.ssTotal.toFixed(2)}</td>
+          <td>—</td>
+          <td>—</td>
+          <td>—</td>
+        </tr>
+      `;
+
+      // Render Kesimpulan
+      let verdict = "";
+      if (res.pValue < alpha) {
+        verdict = `<span class="ok">Ada Perbedaan Signifikan</span><br><br>Dengan P-Value (${res.pValue < 0.001 ? '< 0.001' : res.pValue.toFixed(4)}) < ${alpha}, dapat disimpulkan bahwa rata-rata penjualan antar varian <strong>berbeda secara nyata</strong>.`;
+      } else {
+        verdict = `<span class="warn">Tidak Ada Perbedaan Signifikan</span><br><br>Dengan P-Value (${res.pValue.toFixed(4)}) >= ${alpha}, dapat disimpulkan bahwa tidak ada cukup bukti untuk mengatakan rata-rata penjualan antar varian berbeda.`;
+      }
+
+      document.getElementById("anova-conclusion").innerHTML = verdict;
+      document.getElementById("anova-result").style.display = "block";
+    }); 
+  </script>
+</body>
+</html>

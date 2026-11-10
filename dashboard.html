@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard KPI — Performa Bisnis</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    
+  <div class="nav-overlay" id="nav-overlay"></div>
+
+  <header class="site-header">
+    <button class="mobile-menu-toggle" id="menu-toggle">☰ Menu</button>
+    <nav class="site-nav" id="site-nav">
+      <button class="mobile-close-btn" id="menu-close">×</button>
+      <a href="index.html">Home</a>
+      <a href="ral.html">Uji RAL (Penjualan)</a>
+      <a href="dashboard.html"class="active">Dashboard KPI</a>
+      <a href="readme.html">Panduan</a>
+    </nav>
+    <button id="theme-toggle" class="theme-toggle">🌙 Dark Mode</button>
+  </header>
+
+      <div class="alert-box">
+      <strong>⚠️ Perhatian:</strong> Seluruh data dan grafik pada halaman <strong>Dashboard KPI</strong> adalah <strong>data dummy (simulasi)</strong>. Tujuan halaman tersebut murni untuk demonstrasi antarmuka (UI) dan visualisasi data, bukan data riil perusahaan.
+    </div>
+  
+  <main>
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; margin-bottom: 30px; gap: 20px;">
+      <div>
+        <h1 style="margin-bottom: 5px;">Dashboard KPI</h1>
+        <p class="lead" style="margin-top: 0;">Ringkasan performa keuangan dan penjualan retail.</p>
+      </div>
+      
+      <!-- DROPDOWN FILTER BULAN YANG BARU -->
+      <div class="filter-wrapper">
+        <label for="monthFilter">Periode:</label>
+        <select id="monthFilter" class="custom-select">
+          <!-- Opsi di-generate oleh JS -->
+        </select>
+      </div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+      <div class="kpi-card">
+        <div class="kpi-title">Pendapatan (Bruto)</div>
+        <div class="kpi-value" id="kpi-revenue">Memuat...</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Laba Kotor</div>
+        <div class="kpi-value" id="kpi-profit">Memuat...</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Total Transaksi</div>
+        <div class="kpi-value" id="kpi-orders">Memuat...</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Rata-rata Order (AOV)</div>
+        <div class="kpi-value" id="kpi-aov">Memuat...</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Pelanggan Unik</div>
+        <div class="kpi-value" id="kpi-customers">Memuat...</div>
+      </div>
+    </div>
+
+    <!-- Area Grafik -->
+    <div class="chart-container">
+      <div class="chart-title" id="trendTitle">Tren Pendapatan (Rp) per Bulan</div>
+      <div class="chart-wrapper"><canvas id="trendChart"></canvas></div>
+    </div>
+
+    <div class="chart-row">
+      <div class="chart-container half">
+        <div class="chart-title">Pendapatan per Channel <small>(Klik grafik untuk detail)</small></div>
+        <div class="chart-wrapper"><canvas id="channelChart"></canvas></div>
+      </div>
+      <div class="chart-container half">
+        <div class="chart-title">Pendapatan per Kategori <small>(Klik grafik untuk detail)</small></div>
+        <div class="chart-wrapper"><canvas id="categoryChart"></canvas></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODAL POP-UP DETAIL -->
+  <dialog id="detailModal" class="modal-box">
+    <div class="modal-header">
+      <h2 id="modalTitle">Detail Data</h2>
+      <button id="closeModal" class="modal-close">×</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </dialog>
+
+  <script src="js/ui.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
